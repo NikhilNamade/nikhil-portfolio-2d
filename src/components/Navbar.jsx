@@ -17,10 +17,10 @@ const Navbar = ({ scrollTo }) => {
   const [hoverStyle, setHoverStyle] = useState(null);
   const [activeStyle, setActiveStyle] = useState(null);
 
+  // Move bubble exactly under item
   const moveBubble = (index, setStyle) => {
     const item = itemRefs.current[index];
     const container = containerRef.current;
-
     if (!item || !container) return;
 
     const itemRect = item.getBoundingClientRect();
@@ -32,9 +32,36 @@ const Navbar = ({ scrollTo }) => {
     });
   };
 
+  // Update active bubble position
   useEffect(() => {
     moveBubble(active, setActiveStyle);
   }, [active]);
+
+  // 🔥 Scroll Spy Logic
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = navItems.findIndex(
+              (item) => scrollTo[item.ref].current === entry.target
+            );
+            if (index !== -1) setActive(index);
+          }
+        });
+      },
+      {
+        threshold: 0.6, // 60% section visible
+      }
+    );
+
+    navItems.forEach((item) => {
+      const section = scrollTo[item.ref]?.current;
+      if (section) observer.observe(section);
+    });
+
+    return () => observer.disconnect();
+  }, [scrollTo]);
 
   return (
     <div className="nav-wrap" ref={containerRef}>
@@ -66,10 +93,9 @@ const Navbar = ({ scrollTo }) => {
             key={item.label}
             ref={(el) => (itemRefs.current[index] = el)}
             className={`nav-link ${active === index ? "active" : ""}`}
-            onClick={() => {
-              setActive(index);
-              scrollTo[item.ref].current.scrollIntoView({ behavior: "smooth" });
-            }}
+            onClick={() =>
+              scrollTo[item.ref].current.scrollIntoView({ behavior: "smooth" })
+            }
             onMouseEnter={() => moveBubble(index, setHoverStyle)}
             onMouseLeave={() => setHoverStyle(null)}
           >
