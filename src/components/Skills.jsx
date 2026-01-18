@@ -65,6 +65,9 @@ const Skills = () => {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true, amount: 0.3 }}
+            drag
+            dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
+            
             className="
               group
               w-28 h-28

@@ -1,92 +1,81 @@
-import React from "react";
+import { useEffect, useRef, useState } from "react";
+
+const navItems = [
+  { label: "Home", ref: "homeRef" },
+  { label: "About", ref: "aboutRef" },
+  { label: "Education", ref: "educationRef" },
+  { label: "Skills", ref: "skillRef" },
+  { label: "Work", ref: "workRef" },
+  { label: "Contact", ref: "contactRef" },
+];
 
 const Navbar = ({ scrollTo }) => {
+  const containerRef = useRef(null);
+  const itemRefs = useRef([]);
+
+  const [active, setActive] = useState(0);
+  const [hoverStyle, setHoverStyle] = useState(null);
+  const [activeStyle, setActiveStyle] = useState(null);
+
+  const moveBubble = (index, setStyle) => {
+    const item = itemRefs.current[index];
+    const container = containerRef.current;
+
+    if (!item || !container) return;
+
+    const itemRect = item.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+
+    setStyle({
+      left: itemRect.left - containerRect.left,
+      width: itemRect.width,
+    });
+  };
+
+  useEffect(() => {
+    moveBubble(active, setActiveStyle);
+  }, [active]);
+
   return (
-    <div
-      className="
-        fixed
-        bottom-4 sm:bottom-5
-        z-20
-        left-1/2
-        transform
-        -translate-x-1/2
-        px-3
-      "
-    >
-      <div
-        className="
-          flex
-          items-center
-          gap-4 sm:gap-6
-          bg-white/10
-          backdrop-blur-lg
-          border border-white/30
-          px-4 sm:px-6
-          py-2 sm:py-3
-          rounded-3xl
-          font-semibold
-          text-sm sm:text-base
-          text-gray-400
-          max-w-full
-          overflow-x-auto
-          scrollbar-thin
-          scrollbar-thumb-gray-500
-          scrollbar-track-transparent
-        "
-      >
-        <a
-          onClick={() =>
-            scrollTo.homeRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          Home
-        </a>
+    <div className="nav-wrap" ref={containerRef}>
+      {/* Hover bubble */}
+      {hoverStyle && (
+        <div
+          className="bubble hover"
+          style={{
+            left: hoverStyle.left,
+            width: hoverStyle.width,
+          }}
+        />
+      )}
 
-        <a
-          onClick={() =>
-            scrollTo.aboutRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          About
-        </a>
+      {/* Active bubble */}
+      {activeStyle && (
+        <div
+          className="bubble active"
+          style={{
+            left: activeStyle.left,
+            width: activeStyle.width,
+          }}
+        />
+      )}
 
-        <a
-          onClick={() =>
-            scrollTo.educationRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          Education
-        </a>
-
-        <a
-          onClick={() =>
-            scrollTo.skillRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          Skills
-        </a>
-
-        <a
-          onClick={() =>
-            scrollTo.workRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          Work
-        </a>
-
-        <a
-          onClick={() =>
-            scrollTo.contactRef.current.scrollIntoView({ behavior: "smooth" })
-          }
-          className="cursor-pointer whitespace-nowrap hover:text-white transition-colors duration-300"
-        >
-          Contact
-        </a>
+      <div className="nav">
+        {navItems.map((item, index) => (
+          <button
+            key={item.label}
+            ref={(el) => (itemRefs.current[index] = el)}
+            className={`nav-link ${active === index ? "active" : ""}`}
+            onClick={() => {
+              setActive(index);
+              scrollTo[item.ref].current.scrollIntoView({ behavior: "smooth" });
+            }}
+            onMouseEnter={() => moveBubble(index, setHoverStyle)}
+            onMouseLeave={() => setHoverStyle(null)}
+          >
+            {item.label}
+          </button>
+        ))}
       </div>
     </div>
   );

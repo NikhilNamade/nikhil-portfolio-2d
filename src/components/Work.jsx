@@ -1,103 +1,20 @@
 import { Github, ExternalLink, Clock } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { fadeIn, popUpSpring, staggerContainer } from "../utils/motion";
-import {
-  _3dWebsite,
-  alumconnect,
-  ecoomerce,
-  eventapp,
-  imageeditor,
-  portfoliogen,
-  railwayconcession,
-} from "../assets/index.js";
+import { ArrowRight } from "lucide-react";
+import {projects} from "../hoc/data.js"
+import {useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const Work = () => {
-  const projects = [
-    {
-      title: "AlumConnect",
-      description:
-        "AlumConnect is a MERN-stack based alumni networking platform that facilitates seamless interaction between alumni and students. It features user authentication, profile management, real-time messaging, and cloud-based media handling, ensuring a scalable and engaging community experience.",
-      image: alumconnect,
-      tech: ["MERN", "Socket.io", "Cloudinary"],
-      github: "",
-      demo: "",
-      status: false,
-    },
-    {
-      title: "3D Website",
-      description:
-        "A Dogstudio-inspired 3D web experience developed with React, Three.js, React Three Fiber, and GSAP ScrollTrigger. Implements scroll-linked animations, camera transitions, and interactive 3D elements while maintaining responsiveness and performance.",
-      image: _3dWebsite,
-      tech: ["React", "Three.js", "GSAP", "Tailwind"],
-      github: "https://github.com/NikhilNamade/threejsdog.git",
-      demo: "https://threejsdog.vercel.app/",
-      status: true,
-    },
-    {
-      title: "Railway Concession System",
-      description:
-        "The Railway Concession System is a web-based application that digitizes the student railway concession process by enabling online applications, verification, and approval, reducing paperwork and improving efficiency.",
-      image: railwayconcession,
-      tech: ["ReactJS", "NodeJS", "ExpressJS", "MongoDB", "Cloudinary"],
-      github: "https://github.com/NikhilNamade/railway.git",
-      demo: "https://railway-concession-system.onrender.com/",
-      status: true,
-    },
-    {
-      title: "Portfolio Geng.",
-      description:
-        "A dynamic portfolio generator built with modern web technologies that transforms user input into a responsive, template-based portfolio. Features include real-time preview, reusable components, and customizable sections for projects, skills, and experience.",
-      image: portfoliogen,
-      tech: ["ReactJS", "NodeJS", "ExpressJS", "MongoDB", "Cloudinary"],
-      github: "https://github.com/NikhilNamade/portfolio-generator.git",
-      demo: "https://portfolio-generator-lemon-three.vercel.app/",
-      status: true,
-    },
-    {
-      title: "VisualFix",
-      description:
-        "A modern color grading web application developed using HTML5 Canvas API. The project focuses on real-time color manipulation, smooth UI interactions, and accurate image rendering to deliver professional-grade color adjustment tools in the browser.",
-      image: imageeditor,
-      tech: ["HTML5", "TailwindCss", "JavaScript", "Canvas-API"],
-      github: "https://github.com/NikhilNamade/imageEditor.git",
-      demo: "https://image-editor-roan-psi.vercel.app/",
-      status: true,
-    },
-    {
-      title: "Sort My Events",
-      description:
-        "A cross-platform Flutter application with a Go backend implementing RESTful APIs for event CRUD operations, user registration, and organizer interaction.",
-      image: eventapp,
-      tech: ["Flutter", "Go", "REST API", "Maps SDK"],
-      github: "https://github.com/NikhilNamade/gorestapi.git",
-      demo: "",
-      status: true,
-    },
-    {
-      title: "Shop Your Choice",
-      description:
-        "A full-stack e-commerce platform with a responsive website and Flutter mobile app supporting product browsing, checkout, and admin management.",
-      image: ecoomerce,
-      tech: [
-        "ReactJS",
-        "NodeJS",
-        "ExpressJS",
-        "MongoDB",
-        "Cloudinary",
-        "Flutter",
-      ],
-      github: "https://github.com/NikhilNamade/gorestapi.git",
-      demo: "",
-      status: false,
-    },
-  ];
+
 
   return (
     <motion.section
       variants={staggerContainer(0.2, 0.1)} // stagger children
       initial="hidden"
       whileInView="show"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.05 }}
       className="
         w-full
         bg-[#020617]
@@ -130,18 +47,23 @@ const Work = () => {
         "
       >
         {projects.map((project, index) => (
-          <ProjectCard key={index} project={project} />
+          <ProjectStrip key={index} project={project} index={index} />
         ))}
       </div>
     </motion.section>
   );
 };
 
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, index }) => {
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/project/${index}`, { state: { project } });
+  };
   return (
     <motion.div
       variants={popUpSpring(0.1)}
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true }}
+      onClick={handleClick}
       className="
         bg-[#0b1220]
         rounded-2xl
@@ -151,6 +73,7 @@ const ProjectCard = ({ project }) => {
         duration-300
         hover:shadow-2xl
         hover:-translate-y-2
+        cursor-pointer
       "
     >
       {/* Image */}
@@ -175,7 +98,7 @@ const ProjectCard = ({ project }) => {
           {project.title}
         </h3>
 
-        <p className="text-gray-400 text-sm leading-relaxed line-clamp-4">
+        <p className="text-gray-400 text-sm leading-relaxed">
           {project.description}
         </p>
 
@@ -226,6 +149,95 @@ const ProjectCard = ({ project }) => {
           )}
         </div>
       </div>
+    </motion.div>
+  );
+};
+
+const ProjectStrip = ({ project, index }) => {
+  const navigate = useNavigate();
+  const [hovered, setHovered] = useState(false);
+  const [pos, setPos] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setPos({
+      x: e.clientX - rect.left + 20,
+      y: e.clientY - rect.top + 20,
+    });
+  };
+
+  return (
+    <motion.div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onMouseMove={handleMouseMove}
+      onClick={() => navigate(`/project/${index}`, { state: { project } })}
+      className="
+        relative
+        w-full
+        flex
+        items-center
+        justify-between
+        gap-6
+        px-6
+        py-5
+        rounded-2xl
+        bg-[#020617]
+        border
+        border-white/10
+        cursor-pointer
+        overflow-hidden
+        transition
+        hover:bg-[#020617]/80
+      "
+    >
+      {/* Left content */}
+      <div className="flex flex-col gap-2 z-10">
+        <h3 className="text-lg font-semibold text-white">{project.title}</h3>
+
+        <p className="text-sm text-gray-400">{project.tech.join(" • ")}</p>
+      </div>
+
+      {/* Arrow */}
+      <ArrowRight size={22} className="text-gray-400 z-10" />
+
+      {/* Hover Image */}
+      <AnimatePresence>
+        {hovered && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              scale: 1,
+              x: pos.x + 24,
+              y: pos.y + 24,
+            }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ type: "spring", stiffness: 180, damping: 20 }}
+            className="
+        fixed
+        top-1/2
+        left-1/2
+        w-58
+        h-42
+        rounded-xl
+        overflow-hidden
+        pointer-events-none
+        z-50
+        shadow-2xl
+        border
+        border-white/10
+        bg-black
+      "
+          >
+            <img
+              src={project.image}
+              alt={project.title}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 };

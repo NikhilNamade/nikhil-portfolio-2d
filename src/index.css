@@ -1,1 +1,57 @@
 @import "tailwindcss";
+
+.nav-wrap {
+  position: fixed;
+  bottom: 0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, #141414, #242424);
+  border-radius: 999px;
+  padding: 4px 0px;
+  border: 1px solid #3f3f3f;
+  z-index: 50;
+}
+
+.nav {
+  display: flex;
+  position: relative;
+}
+
+.nav-link {
+  padding: 10px 20px;
+  font-size: 14px;
+  color: #e5e5e5;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 3;
+  transition: color 0.25s ease;
+}
+
+.nav-link:hover {
+  color: white;
+}
+
+.nav-link.active {
+  color: black;
+}
+
+.bubble {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-radius: 999px;
+  transition: all 0.25s ease;
+}
+
+.bubble.active {
+  background: linear-gradient(180deg, #f2f2f2, #b3b3b3);
+  box-shadow: inset 0 2px 6px #ffffff;
+  z-index: 2;
+}
+
+.bubble.hover {
+  background: linear-gradient(180deg, #3f3f3f, #1f1f1f);
+  box-shadow: inset 0 2px 6px #ffffff29;
+  z-index: 1;
+}

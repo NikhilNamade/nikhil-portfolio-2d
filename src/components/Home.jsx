@@ -1,4 +1,4 @@
-const Home = () => {
+const Home = ({work,contact}) => {
   return (
     <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
       {/* Dotted background effect */}
@@ -21,11 +21,15 @@ const Home = () => {
 
         {/* Buttons */}
         <div className="mt-10 flex flex-wrap justify-center gap-4">
-          <button className="px-6 py-3 rounded-lg bg-white text-black font-medium hover:bg-gray-200 transition">
+          <button onClick={() =>
+            work.current.scrollIntoView({ behavior: "smooth" })
+          } className="px-6 py-3 rounded-lg bg-white text-black font-medium hover:bg-gray-200 transition">
             &lt;/&gt; View Projects
           </button>
 
-          <button className="px-6 py-3 rounded-lg border border-gray-600 text-white hover:bg-white hover:text-black transition">
+          <button onClick={() =>
+            contact.current.scrollIntoView({ behavior: "smooth" })
+          } className="px-6 py-3 rounded-lg border border-gray-600 text-white hover:bg-white hover:text-black transition">
             Get In Touch
           </button>
         </div>
