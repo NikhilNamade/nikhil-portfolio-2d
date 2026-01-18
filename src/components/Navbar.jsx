@@ -17,7 +17,6 @@ const Navbar = ({ scrollTo }) => {
   const [hoverStyle, setHoverStyle] = useState(null);
   const [activeStyle, setActiveStyle] = useState(null);
 
-  // Move bubble exactly under item
   const moveBubble = (index, setStyle) => {
     const item = itemRefs.current[index];
     const container = containerRef.current;
@@ -32,12 +31,11 @@ const Navbar = ({ scrollTo }) => {
     });
   };
 
-  // Update active bubble position
   useEffect(() => {
     moveBubble(active, setActiveStyle);
   }, [active]);
 
-  // 🔥 Scroll Spy Logic
+  // Scroll spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -50,9 +48,7 @@ const Navbar = ({ scrollTo }) => {
           }
         });
       },
-      {
-        threshold: 0.6, // 60% section visible
-      }
+      { threshold: 0.6 }
     );
 
     navItems.forEach((item) => {
@@ -64,40 +60,67 @@ const Navbar = ({ scrollTo }) => {
   }, [scrollTo]);
 
   return (
-    <div className="nav-wrap" ref={containerRef}>
-      {/* Hover bubble */}
+    <div
+      ref={containerRef}
+      className="
+        fixed bottom-3 left-1/2 -translate-x-1/2
+        z-50
+        rounded-full border border-neutral-600
+        bg-gradient-to-b from-[#141414] to-[#242424]
+        py-1
+        backdrop-blur-md
+      "
+    >
+      {/* Hover Bubble */}
       {hoverStyle && (
         <div
-          className="bubble hover"
-          style={{
-            left: hoverStyle.left,
-            width: hoverStyle.width,
-          }}
+          className="
+            absolute top-0 h-full rounded-full
+            bg-gradient-to-b from-neutral-600 to-neutral-800
+            shadow-[inset_0_2px_6px_#ffffff29]
+            transition-all duration-300
+            z-10
+          "
+          style={hoverStyle}
         />
       )}
 
-      {/* Active bubble */}
+      {/* Active Bubble */}
       {activeStyle && (
         <div
-          className="bubble active"
-          style={{
-            left: activeStyle.left,
-            width: activeStyle.width,
-          }}
+          className="
+            absolute top-0 h-full rounded-full
+            bg-gradient-to-b from-[#f2f2f2] to-[#b3b3b3]
+            shadow-[inset_0_2px_6px_#ffffff]
+            transition-all duration-300
+            z-20
+          "
+          style={activeStyle}
         />
       )}
 
-      <div className="nav">
+      <div className="relative flex">
         {navItems.map((item, index) => (
           <button
             key={item.label}
             ref={(el) => (itemRefs.current[index] = el)}
-            className={`nav-link ${active === index ? "active" : ""}`}
             onClick={() =>
               scrollTo[item.ref].current.scrollIntoView({ behavior: "smooth" })
             }
             onMouseEnter={() => moveBubble(index, setHoverStyle)}
             onMouseLeave={() => setHoverStyle(null)}
+            className={`
+              relative z-30
+              px-3 py-2 sm:px-5
+              text-xs sm:text-sm
+              font-medium
+              transition-colors duration-300
+              ${
+                active === index
+                  ? "text-black"
+                  : "text-neutral-300 hover:text-white"
+              }
+            `}
           >
             {item.label}
           </button>
