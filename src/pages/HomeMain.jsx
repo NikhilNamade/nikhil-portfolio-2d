@@ -5,7 +5,6 @@ import { useRef } from "react";
 import ContactForm from "../components/ContactForm.jsx";
 import About from "../components/About.jsx";
 import Education from "../components/Education.jsx";
-import { heroBG } from "../assets/index.js";
 import Home from "../components/Home.jsx";
 const HomeMain = () => {
   const homeRef = useRef(null);
@@ -17,10 +16,7 @@ const HomeMain = () => {
   return (
     <div className="bg-black">
       {/* HERO SECTION */}
-      <div
-        className="bg-cover bg-no-repeat bg-center min-h-screen relative z-10"
-        style={{ backgroundImage: `url(${heroBG})` }}
-      >
+      <div>
         <div ref={homeRef}>
           <Home work={workRef} contact={contactRef}/>
         </div>
