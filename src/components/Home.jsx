@@ -5,13 +5,13 @@ const Home = ({ work, contact }) => {
     <section className="relative w-full h-screen overflow-hidden">
       
       {/* 🔹 Spline Background */}
-      <div className="absolute pointer-events-auto">
+      <div className="absolute top-0 left-0 w-full h-full pointer-events-auto">
         <Spline
           scene="https://prod.spline.design/KtkRQqCKznHIZoND/scene.splinecode"
           style={{ width: "100%", height: "100%" }}
         />
       </div>
-      <div className="absolute top-1/4 left-1/4 flex items-center justify-center pointer-events-none:">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none:">
         <div className="text-center px-4 max-w-4xl">
 
           <h1 className="text-white font-extrabold leading-tight text-4xl sm:text-6xl md:text-7xl">
