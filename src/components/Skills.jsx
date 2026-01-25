@@ -12,7 +12,8 @@ import {
   tailwind,
   threejs,
 } from "../assets";
-import {  popUpSpring } from "../utils/motion";
+import { popUpSpring } from "../utils/motion";
+import Spline from "@splinetool/react-spline";
 
 const Skills = () => {
   const tech = [
@@ -31,7 +32,6 @@ const Skills = () => {
 
   return (
     <section className="w-full bg-[#020617] text-white px-4 sm:px-6 py-16 sm:py-20">
-      
       {/* Heading */}
       <motion.h1
         variants={popUpSpring(0)}
@@ -42,21 +42,38 @@ const Skills = () => {
       >
         Skills & Technologies
       </motion.h1>
+      <div className="hidden lg:block max-w-6xl mx-auto">
+        <motion.div
+          variants={popUpSpring(0)}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.3 }}
+          className="
+      relative w-full
+      h-[600px]
+      overflow-hidden
+      rounded-2xl
+    "
+        >
+          <Spline
+            scene="https://prod.spline.design/hacYXzgkrVFK943h/scene.splinecode"
+            style={{ width: "100%", height: "100%" }}
+          />
+        </motion.div>
+      </div>
 
       {/* Skills Grid */}
       <div
         className="
-          max-w-6xl
-          mx-auto
-          grid
-          grid-cols-2
-          sm:grid-cols-3
-          md:grid-cols-4
-          lg:grid-cols-5
-          gap-6
-          sm:gap-8
-          place-items-center
-        "
+    block lg:hidden
+    max-w-6xl
+    mx-auto
+    grid
+    grid-cols-2
+    sm:grid-cols-3
+    gap-6
+    place-items-center
+  "
       >
         {tech.map((item, index) => (
           <motion.div
@@ -67,7 +84,6 @@ const Skills = () => {
             viewport={{ once: true, amount: 0.3 }}
             drag
             dragConstraints={{ top: 0, left: 0, right: 0, bottom: 0 }}
-            
             className="
               group
               w-28 h-28
@@ -87,7 +103,6 @@ const Skills = () => {
               hover:shadow-cyan-500/30
             "
           >
-            {/* Icon */}
             <img
               src={item.icon}
               alt={item.name}
@@ -100,7 +115,6 @@ const Skills = () => {
               "
             />
 
-            {/* Label */}
             <p className="mt-3 text-xs sm:text-sm text-white/80 group-hover:text-white transition">
               {item.name}
             </p>
